@@ -1,21 +1,19 @@
 ﻿using System.Results.Contracts;
-using System.Results.Helpers;
 
 namespace System.Results;
 public class Error : IError
 {
-    public virtual string Message { get; }
+    public string Message { get; }
+    public IReadOnlyList<object?> Metadata { get; }
 
-    public Error(string message)
+    public Error(string message, params object?[] metadata)
     {
+        ArgumentException.ThrowIfNullOrEmpty(message);
+        ArgumentNullException.ThrowIfNull(metadata);
+        
         Message = message;
+        // Directly assigns object?[] to IReadOnlyList<object?> to avoid unnecessary .ToArray() call 
+        // when passing params to ILogger.Log(..., params object?[] args).
+        Metadata = metadata;
     }
-
-    protected Error()
-    {
-        Message = string.Empty;
-    }
-
-    public override string ToString() =>
-        ErrorHelper.FormatToString(this);
 }

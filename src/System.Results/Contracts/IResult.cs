@@ -4,10 +4,10 @@ namespace System.Results.Contracts;
 public interface IResult
 {
     [MemberNotNullWhen(false, nameof(Error))]
-    bool IsSuccess => Error == null;
+    bool IsSuccess { get; }
 
     [MemberNotNullWhen(true, nameof(Error))]
-    bool IsFailure => !IsSuccess;
+    bool IsFailure { get; }
 
     IError? Error { get; }
 }
